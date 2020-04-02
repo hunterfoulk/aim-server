@@ -56,25 +56,39 @@ router.route("/update").post(async (req, res) => {
   let hits = req.body.hits;
   let misses = req.body.misses;
   let accuracy = req.body.accuracy;
+  console.log("fired");
 
-  let doc = await Entry.findOneAndUpdate(
-    { name: name },
-    {
-      hits: hits,
-      misses: misses,
-      accuracy: accuracy
+  try {
+    let current = await Entry.findOne({ name: name });
+    console.log(current);
+
+    if (current.hits > hits) {
+      hits = current.hits;
     }
-  );
+    //find and update
+    let doc = await Entry.findOneAndUpdate(
+      { name: name },
+      {
+        hits: hits,
+        misses: misses,
+        accuracy: accuracy
+      }
+    );
 
-  doc = await Entry.findOne({ name: name });
-  console.log(doc);
-  res.status(200).json("Entry edit successful");
-
-  const newEntry = new Entry({ name, hits, misses, accuracy });
-  newEntry
-    .save()
-    .then(() => res.json("entry created"))
-    .catch(err => res.status(400).json("Error:" + error));
+    //log new entry
+    doc = await Entry.findOne({ name: name });
+    console.log(doc);
+    res.status(200).json("Entry edit successful");
+  } catch (error) {
+    console.log("No entry by that name.");
+    const newEntry = new Entry({ name, hits, misses, accuracy });
+    newEntry
+      .save()
+      .then(() => res.json("entry created"))
+      .catch(err => res.status(400).json("Error:" + error));
+  }
 });
+
+module.exports = app;
 
 module.exports.handler = serverless(app);
