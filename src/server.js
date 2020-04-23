@@ -56,7 +56,7 @@ router.route("/update").post(async (req, res) => {
   let hits = req.body.hits;
   let misses = req.body.misses;
   let accuracy = req.body.accuracy;
-  console.log("fired");
+
 
   try {
     let current = await Entry.findOne({ name: name });
@@ -80,7 +80,7 @@ router.route("/update").post(async (req, res) => {
     console.log(doc);
     res.status(200).json("Entry edit successful");
   } catch (error) {
-    console.log("No entry by that name.");
+ 
     const newEntry = new Entry({ name, hits, misses, accuracy });
     newEntry
       .save()
