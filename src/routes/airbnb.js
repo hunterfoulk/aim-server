@@ -106,6 +106,7 @@ router.route("/houses").post(auth, async (req, res) => {
   }
 });
 
+//signup
 router.route("/signup").post(async (req, res) => {
   try {
     const { email } = req.body;
@@ -123,6 +124,7 @@ router.route("/signup").post(async (req, res) => {
   }
 });
 
+//login
 router.route("/login").post(async (req, res) => {
   try {
     const { email } = req.body;
@@ -133,7 +135,6 @@ router.route("/login").post(async (req, res) => {
       "SELECT * FROM users WHERE email = $1 AND username = $2 AND password = $3",
       [email, username, password]
     );
-
     const user = result.rows[0];
     console.table(user);
 
@@ -165,48 +166,5 @@ router.route("/login").post(async (req, res) => {
     res.status(400).send(error);
   }
 });
-
-// app.post("/login", async (req, res) => {
-//   try {
-//     const { email } = req.body;
-//     const { username } = req.body;
-//     const { password } = req.body;
-
-//     const result = await pool.query(
-//       "SELECT * FROM users WHERE email = $1 AND username = $2 AND password = $3",
-//       [email, username, password]
-//     );
-
-//     const user = result.rows[0];
-//     console.table(user);
-
-//     if (!user) {
-//       res.status(401).send({
-//         error: "Login failed! Check log in credentials",
-//       });
-//     } else {
-//       const payload = {
-//         email: email,
-//         username: username,
-//         user_id: user.user_id,
-//       };
-//       const token = jwt.sign(payload, SECRET);
-
-//       res.cookie("access_token", token, {
-//         maxAGE: 10000,
-//         httpOnly: false,
-//         secure: false,
-//       });
-
-//       res.status(200).send({
-//         payload: payload,
-//       });
-//       console.log(payload, token);
-//     }
-//   } catch (error) {
-//     console.log("login error");
-//     res.status(400).send(error);
-//   }
-// });
 
 module.exports = router;
