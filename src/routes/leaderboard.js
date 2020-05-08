@@ -8,14 +8,6 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error:" + err));
 });
 
-
-router.route("/test").get((req, res) => {
-  Entry.find()
-    .then((entries) => res.json(entries))
-    .catch((err) => res.status(400).json("Error:" + err));
-});
-
-
 router.route("/update").post(async (req, res) => {
   let name = req.body.name;
   let hits = req.body.hits;

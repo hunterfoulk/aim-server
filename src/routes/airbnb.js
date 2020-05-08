@@ -123,7 +123,7 @@ router.route("/signup").post(async (req, res) => {
   }
 });
 
-router.route("/login").post(async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email } = req.body;
     const { username } = req.body;
