@@ -9,7 +9,12 @@ const app = express();
 
 app.use(cookieParser());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -28,7 +33,6 @@ mongoose.set("useFindAndModify", false);
 const connection = mongoose.connection;
 connection.once("open", () => console.log("MongoDB connected successfully"));
 
-//Cors
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
