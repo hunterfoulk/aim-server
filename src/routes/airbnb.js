@@ -68,7 +68,7 @@ router.route("/houses").get(async (req, res) => {
   }
 });
 
-router.route("/houses").post(auth, async (req, res) => {
+router.route("/houses").post(async (req, res) => {
   try {
     const { location } = req.body;
     const { beds } = req.body;
