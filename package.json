@@ -4,21 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/netlify-lambda serve src",
-    "build": "./node_modules/.bin/netlify-lambda build src"
+    "start": "./node_modules/.bin/netlify-lambda serve src -c ./webpack.config.js",
+    "build": "./node_modules/.bin/netlify-lambda build src -c ./webpack.config.js",
+    "dev": "cd src && nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.671.0",
     "body-parser": "^1.19.0",
+    "busboy": "^0.3.1",
+    "busboy-body-parser": "^0.3.2",
+    "connect-busboy": "0.0.2",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.6",
     "netlify-lambda": "^1.6.3",
     "npm": "^6.14.4",
+    "pg": "^8.0.3",
     "serverless-http": "^2.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }
