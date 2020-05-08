@@ -33,6 +33,7 @@ mongoose.set("useFindAndModify", false);
 const connection = mongoose.connection;
 connection.once("open", () => console.log("MongoDB connected successfully"));
 
+// CORS
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
