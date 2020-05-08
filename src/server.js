@@ -11,7 +11,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "hhttps://hungry-euler-ec6a3a.netlify.app",
     credentials: true,
   })
 );
