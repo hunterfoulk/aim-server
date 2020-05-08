@@ -107,8 +107,8 @@ router.route("/houses").post(auth, async (req, res) => {
       ]
     );
 
+    res.status(200).send();
     res.json(newHouse.rows);
-
     console.log("posted to database");
   } catch (err) {
     console.error(err.message);
