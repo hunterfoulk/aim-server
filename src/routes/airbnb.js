@@ -41,7 +41,15 @@ function uploadToS3(file) {
 //middleware
 const auth = async (req, res, next) => {
   const token = req.cookies.access_token;
-
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://hungry-euler-ec6a3a.netlify.app"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-type",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   console.log("cookies", token);
 
   try {
@@ -68,7 +76,7 @@ router.route("/houses").get(async (req, res) => {
   }
 });
 
-router.route("/houses").post(async (req, res) => {
+router.route("/houses").post(auth, async (req, res) => {
   try {
     const { location } = req.body;
     const { beds } = req.body;
