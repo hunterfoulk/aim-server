@@ -9,12 +9,7 @@ const app = express();
 
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 
@@ -35,10 +30,10 @@ connection.once("open", () => console.log("MongoDB connected successfully"));
 
 //Cors
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "true",
+    "Content-type",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   if (req.method === "OPTIONS") {
