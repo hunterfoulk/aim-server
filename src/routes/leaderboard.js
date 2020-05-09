@@ -1,4 +1,5 @@
 const cors = require("cors");
+const router = require("express").Router();
 
 const corsOptions = {
   origin: "https://keen-pike-e36229.netlify.app",
@@ -24,8 +25,6 @@ router.use(cors(corsOptions), (req, res, next) => {
 });
 
 let Entry = require("../models/entry.model.js");
-
-const router = require("express").Router();
 
 router.route("/").get((req, res) => {
   Entry.find()
