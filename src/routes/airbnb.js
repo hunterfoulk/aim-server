@@ -5,6 +5,24 @@ require("dotenv").config;
 const pool = require("../db/db");
 const jwt = require("jsonwebtoken");
 const Busboy = require("busboy");
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "https://h-airbnb.netlify.app",
+  credentials: true,
+};
+
+router.use(cors(corsOptions), (req, res, next) => {
+  console.log(req.method, req.url);
+
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
+    return res.status(200).json({});
+  }
+
+  next();
+});
+
 const SECRET =
   "785bc0808e13150aa10d06e563676943d93548e49c93f32a46907b9a5599fd6ee72dd3edac14eef51c22432ce82e90f0187d24d3c44e673af2691e1950c4b265";
 

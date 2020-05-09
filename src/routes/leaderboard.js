@@ -1,3 +1,20 @@
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "https://keen-pike-e36229.netlify.app",
+};
+
+router.use(cors(corsOptions), (req, res, next) => {
+  console.log(req.method, req.url);
+
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
+    return res.status(200).json({});
+  }
+
+  next();
+});
+
 let Entry = require("../models/entry.model.js");
 
 const router = require("express").Router();
