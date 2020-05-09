@@ -4,8 +4,14 @@ const mongoose = require("mongoose");
 require("dotenv").config;
 const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
+const busboyBodyParser = require("busboy-body-parser");
+const busboy = require("connect-busboy");
+
+// default options, no immediate parsing
 
 const app = express();
+app.use(busboy());
+app.use(busboyBodyParser());
 
 app.use(cookieParser());
 
