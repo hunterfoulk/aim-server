@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 router.use(cookieParser());
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://ecstatic-bartik-098f59.netlify.app",
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
