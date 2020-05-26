@@ -1,8 +1,4 @@
 [build]
   functions = "functions"
 
-  [[headers]]
 
-  for = "/*"
-    [headers.values]
-    Access-Control-Allow-Origin = "https://h-airbnb.netlify.app"

@@ -14,13 +14,6 @@ app.use(busboyBodyParser());
 
 app.use(cookieParser());
 
-// app.use(
-//   cors({
-//     origin: "https://hungry-euler-ec6a3a.netlify.app",
-//     credentials: true,
-//   })
-// );
-
 app.use(express.json());
 
 const port = process.env.PORT || 9000;
@@ -38,30 +31,16 @@ mongoose.set("useFindAndModify", false);
 const connection = mongoose.connection;
 connection.once("open", () => console.log("MongoDB connected successfully"));
 
-// CORS
-// app.use((req, res, next) => {
-//   res.header(
-//     "Access-Control-Allow-Origin",
-//     "https://hungry-euler-ec6a3a.netlify.app"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Content-type",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   if (req.method === "OPTIONS") {
-//     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
-
 //Routes
 const leaderboardRoute = require("./routes/leaderboard");
 app.use("/.netlify/functions/server/leaderboard", leaderboardRoute);
 
 const airbnb = require("./routes/airbnb");
 app.use("/.netlify/functions/server/airbnb", airbnb);
+
+const trello = require("./routes/trello");
+app.use("/.netlify/functions/server/trello", trello);
+
 
 module.exports = app;
 module.exports.handler = serverless(app);
