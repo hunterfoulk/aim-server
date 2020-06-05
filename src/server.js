@@ -41,6 +41,8 @@ app.use("/.netlify/functions/server/airbnb", airbnb);
 const trello = require("./routes/trello");
 app.use("/.netlify/functions/server/trello", trello);
 
+const portfolio = require("./routes/portfolio");
+app.use("/.netlify/functions/server/portfolio", portfolio);
 
 module.exports = app;
 module.exports.handler = serverless(app);
