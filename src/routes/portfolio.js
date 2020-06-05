@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const cors = require("cors");
-var whitelist = ["http://localhost:3000", "https:/hunterfoulk.com"];
+var whitelist = ["http://localhost:3000", "https://hunterfoulk.com/"];
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
