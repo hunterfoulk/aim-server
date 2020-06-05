@@ -32,8 +32,6 @@ router.route("/").get(async (req, res) => {
   res.send("home-route");
 });
 
-// process.env.FROM_EMAIL,
-
 router.post("/sendemail", async (req, res) => {
   const { name } = req.body;
   const { email } = req.body;
