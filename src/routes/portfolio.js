@@ -7,12 +7,14 @@ require("dotenv").config();
 
 const corsOptions = {
   origin: "https://hunterfoulk.com",
-  credentials: true,
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
   console.log(req.method, req.url);
-
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   if (req.method === "OPTIONS") {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     return res.status(200).json({});
@@ -29,7 +31,9 @@ router.post("/sendemail", async (req, res) => {
   const { name } = req.body;
   const { email } = req.body;
   const { message } = req.body;
+
   console.log("this is the body", req.body);
+
   exports.handler = function (event, context, callback) {
     let mailOptions = {
       to: "hunterfoulkdev@gmail.com",
