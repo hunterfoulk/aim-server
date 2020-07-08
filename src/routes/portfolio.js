@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const corsOptions = {
-  origin: "https://hunterfoulk.com/",
+  origin: "https://hunterfoulk.com",
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
