@@ -76,14 +76,12 @@ router.post("/sendemail", async (req, res) => {
   let transporter = nodemailer.createTransport(
     smtpTransport({
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      port: 587,
+      ignoreTLS: false,
+      secure: false,
       auth: {
         user: "hunterfoulkdev@gmail.com",
         pass: "Hunterfoulk01",
-      },
-      tls: {
-        ciphers: "SSLv3",
       },
     })
   );
