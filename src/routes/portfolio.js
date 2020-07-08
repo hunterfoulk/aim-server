@@ -85,7 +85,7 @@ router.post("/sendemail", async (req, res) => {
       })
     );
 
-    ransporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         const response = {
           statusCode: 500,
