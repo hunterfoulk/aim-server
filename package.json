@@ -26,7 +26,7 @@
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.6",
     "netlify-lambda": "^1.6.3",
-    "nodemailer": "^6.4.8",
+    "nodemailer": "^6.4.10",
     "npm": "^6.14.4",
     "pg": "^8.0.3",
     "serverless-http": "^2.3.2"
