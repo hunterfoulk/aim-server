@@ -13,7 +13,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 
 const corsOptions = {
-  origin: "https://distracted-mccarthy-5cb652.netlify.app",
+  origin: "https://typegram.netlify.app",
   credentials: true,
 };
 
