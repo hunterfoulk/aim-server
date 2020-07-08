@@ -70,8 +70,8 @@ router.post("/sendemail", async (req, res) => {
 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
     auth: {
       user: "hunterfoulkdev@gmail.com",
       pass: "Hunterfoulk01",
