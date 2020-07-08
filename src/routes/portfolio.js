@@ -2,6 +2,7 @@ const router = require("express").Router();
 const cors = require("cors");
 // var whitelist = ["http://localhost:3000", "https://hunterfoulk.com/"];
 const nodemailer = require("nodemailer");
+var smtpTransport = require("nodemailer-smtp-transport");
 require("dotenv").config();
 
 const corsOptions = {
@@ -68,18 +69,20 @@ router.post("/sendemail", async (req, res) => {
     `,
   };
 
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: "hunterfoulkdev@gmail.com",
-      pass: "Hunterfoulk01",
-    },
-    tls: {
-      ciphers: "SSLv3",
-    },
-  });
+  let transporter = nodemailer.createTransport(
+    smtpTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "hunterfoulkdev@gmail.com",
+        pass: "Hunterfoulk01",
+      },
+      tls: {
+        ciphers: "SSLv3",
+      },
+    })
+  );
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (!error) {
