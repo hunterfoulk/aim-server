@@ -83,10 +83,10 @@ router.post("/sendemail", async (req, res) => {
       console.log("ID -> ", info.messageId);
       console.log("Sender -> ", email);
       console.log("Receiver -> ", info.envelope.to);
-      res.status(200).send("Email Sent");
+      res.status(200).send("Inquiry Sent");
     } else {
       console.log(error);
-      res.status(400).send();
+      res.status(400).end();
     }
   });
 });
