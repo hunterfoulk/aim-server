@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const corsOptions = {
   origin: "https://hunterfoulk.com",
+  credentials: true,
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
@@ -29,12 +30,12 @@ router.post("/sendemail", async (req, res) => {
   const { email } = req.body;
   const { message } = req.body;
   console.log("this is the body", req.body);
-
-  let mailOptions = {
-    to: "hunterfoulkdev@gmail.com",
-    from: "huntertehjakey@hotmail.com",
-    subject: `New Inquiry (${name})`,
-    html: `
+  exports.handler = function (event, context, callback) {
+    let mailOptions = {
+      to: "hunterfoulkdev@gmail.com",
+      from: "huntertehjakey@hotmail.com",
+      subject: `New Inquiry (${name})`,
+      html: `
       <table style="max-width: 700px; width: 100%;">
       <tr>
         <td>
@@ -67,34 +68,42 @@ router.post("/sendemail", async (req, res) => {
       </tr>
     </table>
     `,
+    };
+
+    let transporter = nodemailer.createTransport(
+      smtpTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: "hunterfoulkdev@gmail.com",
+          pass: "Hunterfoulk01",
+        },
+        tls: {
+          ciphers: "SSLv3",
+        },
+      })
+    );
+
+    ransporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        const response = {
+          statusCode: 500,
+          body: JSON.stringify({
+            error: error.message,
+          }),
+        };
+        callback(null, response);
+      }
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: `Email processed succesfully!`,
+        }),
+      };
+      callback(null, response);
+    });
   };
-
-  let transporter = nodemailer.createTransport(
-    smtpTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: "hunterfoulkdev@gmail.com",
-        pass: "Hunterfoulk01",
-      },
-      tls: {
-        ciphers: "SSLv3",
-      },
-    })
-  );
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (!error) {
-      console.log("ID -> ", info.messageId);
-      console.log("Sender -> ", email);
-      console.log("Receiver -> ", info.envelope.to);
-      res.status(200).send("Inquiry Sent");
-    } else {
-      console.log(error);
-      res.status(400).send();
-    }
-  });
 });
 
 module.exports = router;
