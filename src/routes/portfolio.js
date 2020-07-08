@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://hunterfoulk.com",
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
@@ -86,7 +86,7 @@ router.post("/sendemail", async (req, res) => {
       res.status(200).send("Inquiry Sent");
     } else {
       console.log(error);
-      res.status(400).end();
+      res.status(400).send();
     }
   });
 });
