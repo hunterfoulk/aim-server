@@ -44,5 +44,8 @@ app.use("/.netlify/functions/server/trello", trello);
 const portfolio = require("./routes/portfolio");
 app.use("/.netlify/functions/server/portfolio", portfolio);
 
+const typegram = require("./routes/typegram");
+app.use("/.netlify/functions/server/typegram", typegram);
+
 module.exports = app;
 module.exports.handler = serverless(app);
