@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const nodemailer = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
-
 require("dotenv").config();
 const { cors, corsOptions } = require("../cors");
 var whitelist = ["http://localhost:3000", "https://hunterfoulk.com"];
@@ -87,7 +86,7 @@ router.post("/sendemail", async (req, res) => {
     `,
   };
 
-  let transporter = nodemailer.createTransport("SMTP", {
+  let transporter = nodemailer.createTransport({
     service: "Hotmail",
     secureConnection: false, // TLS requires secureConnection to be false
     port: 587, // port for secure SMTP
