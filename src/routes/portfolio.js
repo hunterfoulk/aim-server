@@ -88,11 +88,7 @@ router.post("/sendemail", async (req, res) => {
 
   let transporter = nodemailer.createTransport({
     service: "Hotmail",
-    secureConnection: false, // TLS requires secureConnection to be false
-    port: 587, // port for secure SMTP
-    tls: {
-      ciphers: "SSLv3",
-    },
+
     auth: {
       user: "huntertehjakey@hotmail.com",
       pass: "Hunterfoulk01",
