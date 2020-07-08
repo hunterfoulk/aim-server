@@ -35,8 +35,8 @@ router.post("/sendemail", async (req, res) => {
   console.log("this is the body", req.body);
 
   let mailOptions = {
-    to: "hunterfoulkdev@gmail.com",
-    from: "huntertehjakey@hotmail.com",
+    to: "huntertehjakey@hotmail.com",
+    from: "hunterfoulkdev@gmail.com",
     subject: `New Inquiry (${name})`,
     html: `
       <table style="max-width: 700px; width: 100%;">
@@ -80,8 +80,8 @@ router.post("/sendemail", async (req, res) => {
       ignoreTLS: false,
       secure: false,
       auth: {
-        user: "hunterfoulkdev@gmail.com",
-        pass: "Hunterfoulk01",
+        user: "huntertehjakey@hotmail.com",
+        pass: "Murphy01",
       },
     })
   );

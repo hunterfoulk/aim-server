@@ -21,6 +21,7 @@ router.use(cors(corsOptions), (req, res, next) => {
   console.log(req.method, req.url);
   res.header(
     "Access-Control-Allow-Headers",
+    " Access-Control-Allow-Origin: https://typegram.netlify.app",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   if (req.method === "OPTIONS") {
