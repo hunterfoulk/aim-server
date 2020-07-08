@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const corsOptions = {
   origin: "https://hunterfoulk.com",
+  credientials: true,
 };
 
 router.use(cors(corsOptions), (req, res, next) => {
