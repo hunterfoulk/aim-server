@@ -83,7 +83,7 @@ router.post("/sendemail", async (req, res) => {
       },
       auth: {
         user: "huntertehjakey@hotmail.com",
-        pass: "Murphy01",
+        pass: "Hunterfoulk01",
       },
     })
   );
