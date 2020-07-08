@@ -13,7 +13,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://distracted-mccarthy-5cb652.netlify.app",
   credentials: true,
 };
 
