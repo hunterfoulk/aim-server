@@ -1,6 +1,4 @@
 const router = require("express").Router();
-
-// var whitelist = ["http://localhost:3000", "https://hunterfoulk.com/"];
 const nodemailer = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
 
@@ -27,6 +25,7 @@ var whitelist = ["http://localhost:3000", "https://hunterfoulk.com"];
 // });
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
+  console.log("cors fired");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
