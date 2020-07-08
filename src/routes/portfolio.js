@@ -75,7 +75,7 @@ router.post("/sendemail", async (req, res) => {
 
   let transporter = nodemailer.createTransport(
     smtpTransport({
-      host: "smtp-mail.outlook.com",
+      host: "smtp-mail.hotmail.com",
       secureConnection: false, // TLS requires secureConnection to be false
       port: 587, // port for secure SMTP
       tls: {
