@@ -3,14 +3,30 @@ const cors = require("cors");
 // var whitelist = ["http://localhost:3000", "https://hunterfoulk.com/"];
 const nodemailer = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
+
 require("dotenv").config();
+const { cors, corsOptions } = require("./cors");
+var whitelist = ["http://localhost:3000", "https://hunterfoulk.com"];
 
-const corsOptions = {
-  origin: "https://hunterfoulk.com",
-};
+// const corsOptions = {
+//   origin: "https://hunterfoulk.com",
+// };
 
-router.use(cors(corsOptions), (req, res, next) => {
-  console.log(req.method, req.url);
+// router.use(cors(corsOptions), (req, res, next) => {
+//   console.log(req.method, req.url);
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   if (req.method === "OPTIONS") {
+//     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
+//     return res.status(200).json({});
+//   }
+
+//   next();
+// });
+
+router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -19,7 +35,6 @@ router.use(cors(corsOptions), (req, res, next) => {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     return res.status(200).json({});
   }
-
   next();
 });
 
