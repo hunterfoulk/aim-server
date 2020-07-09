@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Busboy = require("busboy");
-const cors = require("cors");
 const pool = require("../db/db");
 const config = require("../config");
 const AWS = require("aws-sdk");
