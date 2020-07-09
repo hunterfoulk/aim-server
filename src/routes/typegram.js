@@ -11,24 +11,24 @@ require("dotenv").config;
 
 router.use(busboy());
 router.use(busboyBodyParser());
+const { cors, corsOptions } = require("../cors");
+var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
 
-const corsOptions = {
-  origin: "https://typegram.netlify.app",
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "https://typegram.netlify.app",
+//   credentials: true,
+// };
 
-router.use(cors(corsOptions), (req, res, next) => {
-  console.log(req.method, req.url);
+router.use(cors(corsOptions(whitelist)), (req, res, next) => {
+  console.log("cors fired");
   res.header(
     "Access-Control-Allow-Headers",
-    " Access-Control-Allow-Origin: https://typegram.netlify.app",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   if (req.method === "OPTIONS") {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     return res.status(200).json({});
   }
-
   next();
 });
 
