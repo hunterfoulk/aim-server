@@ -5,6 +5,19 @@ require("dotenv").config();
 const { cors, corsOptions } = require("../cors");
 var whitelist = ["http://localhost:3000", "https://hunterfoulk.com"];
 
+router.use(cors(corsOptions(whitelist)), (req, res, next) => {
+  console.log("cors fired");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
+    return res.status(200).json({});
+  }
+  next();
+});
+
 // const corsOptions = {
 //   origin: "https://hunterfoulk.com",
 // };
@@ -22,19 +35,6 @@ var whitelist = ["http://localhost:3000", "https://hunterfoulk.com"];
 
 //   next();
 // });
-
-router.use(cors(corsOptions(whitelist)), (req, res, next) => {
-  console.log("cors fired");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
-    return res.status(200).json({});
-  }
-  next();
-});
 
 router.route("/").get(async (req, res) => {
   res.send("home-route");
