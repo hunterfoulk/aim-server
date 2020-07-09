@@ -48,8 +48,8 @@ router.post("/sendemail", async (req, res) => {
   console.log("this is the body", req.body);
 
   let mailOptions = {
-    to: "hunterfoulk@zohomail.com",
-    from: "hunterfoulkdev@gmail.com",
+    to: "hunterfoulkdev@gmail.com",
+    from: "hunterfoulk@zohomail.com",
     subject: `New Inquiry (${name})`,
     html: `
       <table style="max-width: 700px; width: 100%;">
@@ -87,7 +87,7 @@ router.post("/sendemail", async (req, res) => {
   };
 
   let transporter = nodemailer.createTransport({
-    service: "smtp.zoho.com",
+    host: "smtp.zoho.com",
     port: 465,
     secure: true,
     auth: {
