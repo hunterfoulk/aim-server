@@ -1,21 +1,27 @@
 const cors = require("cors");
 const router = require("express").Router();
+const { cors, corsOptions } = require("../cors");
+var whitelist = [
+  "http://localhost:3000",
+  "https://keen-pike-e36229.netlify.app",
+];
 
-const corsOptions = {
-  origin: "https://keen-pike-e36229.netlify.app",
-};
+// const corsOptions = {
+//   origin: "https://keen-pike-e36229.netlify.app",
+// };
 
-router.use(cors(corsOptions), (req, res, next) => {
-  console.log(req.method, req.url);
-
+router.use(cors(corsOptions(whitelist)), (req, res, next) => {
+  console.log("cors fired");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   if (req.method === "OPTIONS") {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     return res.status(200).json({});
   }
-
   next();
 });
-
 let Entry = require("../models/entry.model.js");
 
 router.route("/").get((req, res) => {
