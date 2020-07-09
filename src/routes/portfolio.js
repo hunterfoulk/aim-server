@@ -48,8 +48,8 @@ router.post("/sendemail", async (req, res) => {
   console.log("this is the body", req.body);
 
   let mailOptions = {
-    to: "hunterfoulkdev@gmail.com",
-    from: "hunterfoulk@zohomail.com",
+    to: "hunterfoulk@zohomail.com",
+    from: "hunterfoulkdev@gmail.com",
     subject: `New Inquiry (${name})`,
     html: `
       <table style="max-width: 700px; width: 100%;">
