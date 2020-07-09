@@ -48,8 +48,8 @@ router.post("/sendemail", async (req, res) => {
   console.log("this is the body", req.body);
 
   let mailOptions = {
-    to: "huntertehjakey@hotmail.com",
-    from: "hunterfoulkdev@gmail.com",
+    to: "hunterfoulkdev@gmail.com",
+    from: "hunterfoulk@zohomail.com",
     subject: `New Inquiry (${name})`,
     html: `
       <table style="max-width: 700px; width: 100%;">
@@ -87,14 +87,11 @@ router.post("/sendemail", async (req, res) => {
   };
 
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
-    secureConnection: false, // TLS requires secureConnection to be false
-    port: 587, // port for secure SMTP
-    tls: {
-      ciphers: "SSLv3",
-    },
+    service: "smtp.zoho.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "huntertehjakey@hotmail.com",
+      user: "hunterfoulk@zohomail.com",
       pass: "Hunterfoulk01",
     },
   });
