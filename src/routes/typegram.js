@@ -17,8 +17,6 @@ router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   console.log("cors fired");
   res.header(
     "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Credentials",
-    true,
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   if (req.method === "OPTIONS") {

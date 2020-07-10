@@ -9,6 +9,7 @@ const corsOptions = (whitelist) => {
         callback(new Error("Not allowed by CORS"));
       }
     },
+    credentials: true,
   };
 };
 
