@@ -12,21 +12,26 @@ router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
 var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
-var creds = { credentials: true };
 
-router.use(cors(corsOptions(whitelist, creds)), (req, res, next) => {
-  console.log("cors fired");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Credentials: true",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
-    return res.status(200).json({});
+router.use(
+  cors({ credentials: true })(corsOptions(whitelist)),
+  (req, res, next) => {
+    console.log("cors fired");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Credentials: true",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    if (req.method === "OPTIONS") {
+      res.header(
+        "Access-Control-Allow-Methods",
+        "GET, PUT, POST, PATCH, DELETE"
+      );
+      return res.status(200).json({});
+    }
+    next();
   }
-  next();
-});
+);
 
 const SECRET =
   "785bc0808e13150aa10d06e563676943d93548e49c93f32a46907b9a5599fd6ee72dd3edac14eef51c22432ce82e90f0187d24d3c44e673af2691e1950c4b265";
