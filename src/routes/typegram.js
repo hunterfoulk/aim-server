@@ -11,6 +11,7 @@ require("dotenv").config;
 router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
+
 var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
