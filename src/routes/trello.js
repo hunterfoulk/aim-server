@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const pool = require("../db/db");
-const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
