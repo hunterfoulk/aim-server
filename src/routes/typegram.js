@@ -7,7 +7,6 @@ const busboyBodyParser = require("busboy-body-parser");
 const busboy = require("connect-busboy");
 const jwt = require("jsonwebtoken");
 require("dotenv").config;
-
 router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");

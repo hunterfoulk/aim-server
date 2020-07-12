@@ -26,7 +26,7 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error:" + err));
 });
 
-router.route("/update").post(async (req, res) => {
+router.post("/update", cors(corsOptions(whitelist)), async (req, res) => {
   let name = req.body.name;
   let hits = req.body.hits;
   let misses = req.body.misses;
