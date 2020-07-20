@@ -245,6 +245,7 @@ router.route("/login").post(async (req, res) => {
         bio: user.bio,
         website: user.website,
         name: user.name,
+        likes: user.likes,
       };
 
       const token = jwt.sign(payload, SECRET);
@@ -447,7 +448,7 @@ router.route("/updatemisc").post(async (req, res) => {
 
       res.status(200).send({ payload: payload });
       console.log("payload", payload);
-      ////////////////////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////////////////////
     } else if (website === "" && name === "") {
       const updateMisc = await pool.query(
         "UPDATE instagramusers SET bio = $1 WHERE user_id = $2",

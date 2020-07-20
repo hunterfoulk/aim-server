@@ -47,5 +47,8 @@ app.use("/.netlify/functions/server/portfolio", portfolio);
 const typegram = require("./routes/typegram");
 app.use("/.netlify/functions/server/typegram", typegram);
 
+const youtube = require("./routes/youtube");
+app.use("/.netlify/functions/server/youtube", youtube);
+
 module.exports = app;
 module.exports.handler = serverless(app);
