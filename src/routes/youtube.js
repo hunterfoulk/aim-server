@@ -99,7 +99,7 @@ router.route("/login").post(async (req, res) => {
         about: user.about,
         banner: user.banner,
         subcount: user.subcount,
-        subscribers: user.subscribers,
+        subscriptions: user.subscriptions,
         user_id: user.user_id,
         likes: user.likes,
       };
@@ -194,7 +194,8 @@ router.route("/update").post(async (req, res) => {
           name: user.name,
           about: user.about,
           subcount: user.subcount,
-          subscribers: user.subscribers,
+          subscriptions: user.subscriptions,
+          likes: user.likes,
         };
 
         res.status(200).send({ payload: payload });
@@ -228,7 +229,7 @@ router.route("/update").post(async (req, res) => {
           name: user.name,
           about: user.about,
           subcount: user.subcount,
-          subscribers: user.subscribers,
+          subscriptions: user.subscriptions,
           likes: user.likes,
         };
 
@@ -262,7 +263,7 @@ router.route("/update").post(async (req, res) => {
           name: user.name,
           about: user.about,
           subcount: user.subcount,
-          subscribers: user.subscribers,
+          subscriptions: user.subscriptions,
           likes: user.likes,
         };
 
@@ -293,7 +294,7 @@ router.route("/update").post(async (req, res) => {
           name: user.name,
           about: user.about,
           subcount: user.subcount,
-          subscribers: user.subscribers,
+          subscriptions: user.subscriptions,
           likes: user.likes,
         };
 
@@ -467,14 +468,15 @@ router.route("/currentvideo").get(async (req, res) => {
   }
 });
 
+/////////////////////// ADD LIKED VIDEO ///////////////////////////
 router.route("/updatelikes").post(async (req, res) => {
   try {
     const { video_id } = req.body;
     const { user_id } = req.body;
     const { newLikedVid } = req.body;
     const { newLikes } = req.body;
-    console.log("new liked vid", newLikedVid);
-    console.log("new likes", newLikes);
+    // console.log("new liked vid", newLikedVid);
+    console.log("NEW LIKESSS", newLikes);
 
     const getLikes = await pool.query(
       "SELECT likes FROM youtubeusers WHERE user_id = $1",
@@ -482,11 +484,7 @@ router.route("/updatelikes").post(async (req, res) => {
     );
     let likes = JSON.stringify(getLikes.rows[0].likes);
     let parsedLikes = JSON.parse(likes);
-    // let parsedVid = JSON.parse(newLikedVid);
     parsedLikes.push(newLikedVid);
-    console.log("parsed", parsedLikes);
-    // console.log("parsed like", parsedVid);
-    console.log(getLikes.rows[0].likes);
 
     const updateUser = await pool.query(
       "UPDATE youtubeusers SET likes = $1 WHERE user_id = $2 ",
@@ -502,7 +500,7 @@ router.route("/updatelikes").post(async (req, res) => {
       "SELECT * FROM youtubeusers WHERE user_id = $1 ",
       [user_id]
     );
-    console.log("update users", updateUser);
+
     let user = userData.rows[0];
 
     const payload = {
@@ -513,7 +511,7 @@ router.route("/updatelikes").post(async (req, res) => {
       about: user.about,
       banner: user.banner,
       subcount: user.subcount,
-      subscribers: user.subscribers,
+      subscriptions: user.subscriptions,
       user_id: user.user_id,
       likes: user.likes,
     };
@@ -521,6 +519,211 @@ router.route("/updatelikes").post(async (req, res) => {
     res.status(200).send({ payload: payload });
   } catch (error) {
     console.error("server update likes error", error);
+  }
+});
+
+router.route("/deletelike").post(async (req, res) => {
+  try {
+    const { video_id } = req.body;
+    const { user_id } = req.body;
+    // const { newLikedVid } = req.body;
+    const { newLikes } = req.body;
+    console.log("video_id", video_id);
+    console.log("new likes", newLikes);
+
+    const likesData = await pool.query(
+      "SELECT likes FROM youtubeusers WHERE user_id = $1",
+      [user_id]
+    );
+
+    let likes = likesData.rows[0].likes;
+
+    console.log("strigned id", video_id);
+    let newId = video_id.toString();
+
+    console.log(typeof newId);
+
+    let newLikesData = likes.filter((likedVid) => likedVid.video_id !== newId);
+    console.log("new likes video", newLikesData);
+
+    const updateUser = await pool.query(
+      "UPDATE youtubeusers SET likes = $1 WHERE user_id = $2 ",
+      [JSON.stringify(newLikesData), user_id]
+    );
+
+    const updateVideo = await pool.query(
+      "UPDATE videos SET likes = $1 WHERE video_id = $2 ",
+      [newLikes, video_id]
+    );
+
+    const userData = await pool.query(
+      "SELECT * FROM youtubeusers WHERE user_id = $1 ",
+      [user_id]
+    );
+
+    let user = userData.rows[0];
+    const payload = {
+      email: user.email,
+      password: user.password,
+      pic: user.pic,
+      name: user.name,
+      about: user.about,
+      banner: user.banner,
+      subcount: user.subcount,
+      subscriptions: user.subscriptions,
+      user_id: user.user_id,
+      likes: user.likes,
+    };
+    console.log(updateVideo.rows[0]);
+    res.status(200).send({ payload: payload });
+  } catch (error) {
+    console.error("server update likes error", error);
+  }
+});
+
+router.route("/switchlikes").post(async (req, res) => {
+  try {
+    const { video_id } = req.body;
+    const { user_id } = req.body;
+    // const { newDislikedVid } = req.body;
+    const { newLikes } = req.body;
+    const { newDislikes } = req.body;
+    console.log("new dislikes", newDislikes);
+    // console.log("new liked vid", newDislikedVid);
+    console.log("new likes", newLikes);
+    console.log("video_id", video_id);
+
+    const likesData = await pool.query(
+      "SELECT likes FROM youtubeusers WHERE user_id = $1",
+      [user_id]
+    );
+
+    let likes = likesData.rows[0].likes;
+    console.log("this is the likes", likes);
+    let newId = video_id.toString();
+
+    console.log(typeof newId);
+
+    let newLikesData = likes.filter((likedVid) => likedVid.video_id !== newId);
+    console.log("new likes video", newLikesData);
+
+    console.log("new likes video", newLikesData);
+    const updateUser = await pool.query(
+      "UPDATE youtubeusers SET likes = $1 WHERE user_id = $2 ",
+      [JSON.stringify(newLikesData), user_id]
+    );
+
+    console.log(updateUser.rows[0]);
+    const updateVideoLikes = await pool.query(
+      "UPDATE videos SET likes = $1 WHERE video_id = $2 ",
+      [newLikes, video_id]
+    );
+
+    const updateVideoDislikes = await pool.query(
+      "UPDATE videos SET dislikes = $1 WHERE video_id = $2 ",
+      [newDislikes, video_id]
+    );
+
+    const userData = await pool.query(
+      "SELECT * FROM youtubeusers WHERE user_id = $1 ",
+      [user_id]
+    );
+
+    let user = userData.rows[0];
+    const payload = {
+      email: user.email,
+      password: user.password,
+      pic: user.pic,
+      name: user.name,
+      about: user.about,
+      banner: user.banner,
+      subcount: user.subcount,
+      subscriptions: user.subscriptions,
+      user_id: user.user_id,
+      likes: user.likes,
+    };
+
+    res.status(200).send({ payload: payload });
+  } catch (error) {
+    console.error("server switch likes error", error);
+  }
+});
+
+router.route("/dislikevideo").post(async (req, res) => {
+  try {
+    const { video_id } = req.body;
+    const { newDislikes } = req.body;
+    console.log("NEW DISLIKES", newDislikes);
+
+    const updateVideoDislikes = await pool.query(
+      "UPDATE videos SET dislikes = $1 WHERE video_id = $2 ",
+      [newDislikes, video_id]
+    );
+
+    console.log(updateVideoDislikes.rows[0]);
+
+    res.status(200).json(updateVideoDislikes.rows[0]);
+  } catch (error) {
+    console.error("server switch likes error", error);
+  }
+});
+
+router.route("/subscribe").post(async (req, res) => {
+  try {
+    const { videoUser } = req.body;
+    const { user_id } = req.body;
+    console.log("video user id", videoUser);
+    console.log("user id", user_id);
+
+    const subData = await pool.query(
+      "SELECT name,pic,subcount FROM youtubeusers WHERE user_id = $1 ",
+      [videoUser]
+    );
+
+    let newSubscription = subData.rows[0];
+
+    const userData = await pool.query(
+      "SELECT * FROM youtubeusers WHERE user_id = $1 ",
+      [user_id]
+    );
+
+    let userArr = JSON.stringify(userData.rows[0].subscriptions);
+    let parsedArr = JSON.parse(userArr);
+    // let parsedUser = JSON.parse(newSubscription);
+    // console.log("parsed user", parsedUser);
+    // console.log(parsedArr);
+    parsedArr.push(newSubscription);
+
+    console.log("users array", userArr);
+    console.log("parsed array", parsedArr);
+
+    const updateSubs = await pool.query(
+      "UPDATE youtubeusers SET subscriptions = $1 WHERE user_id = $2 ",
+      [JSON.stringify(parsedArr), user_id]
+    );
+
+    const newUserData = await pool.query(
+      "SELECT * FROM youtubeusers WHERE user_id = $1 ",
+      [user_id]
+    );
+
+    let user = newUserData.rows[0];
+    const payload = {
+      email: user.email,
+      password: user.password,
+      pic: user.pic,
+      name: user.name,
+      about: user.about,
+      banner: user.banner,
+      subcount: user.subcount,
+      subscriptions: user.subscriptions,
+      user_id: user.user_id,
+      likes: user.likes,
+    };
+
+    res.status(200).send({ payload: payload });
+  } catch (error) {
+    console.error("server subscribe error", error);
   }
 });
 
