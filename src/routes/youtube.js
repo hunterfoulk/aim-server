@@ -43,7 +43,7 @@ router.use(cors(corsOptions(whitelist)), (req, res, next) => {
         "https://airbnbbucket.s3.us-east-2.amazonaws.com/youtubeusers/default.png";
       let defaultBanner =
         "https://airbnbbucket.s3.us-east-2.amazonaws.com/youtubeusers/defaultbanner.jpg";
-      let subscribers = [];
+      let subscriptions = [];
       let likes = [];
 
       console.log("email", email);
@@ -51,14 +51,14 @@ router.use(cors(corsOptions(whitelist)), (req, res, next) => {
       console.log("name", name);
 
       const newUsers = await pool.query(
-        "INSERT INTO youtubeusers (email,name,password,pic,banner,subscribers,likes) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
+        "INSERT INTO youtubeusers (email,name,password,pic,banner,subscriptions,likes) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
         [
           email,
           name,
           password,
           defaultPic,
           defaultBanner,
-          JSON.stringify(subscribers),
+          JSON.stringify(subscriptions),
           JSON.stringify(likes),
         ]
       );
