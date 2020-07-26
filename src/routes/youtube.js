@@ -421,6 +421,19 @@ router.route("/allvideos").get(async (req, res) => {
   }
 });
 
+router.route("/searchvideos").get(async (req, res) => {
+  try {
+    const getVideos = await pool.query(
+      "SELECT * FROM videos ORDER BY video_id"
+    );
+
+    res.json(getVideos.rows);
+    // console.log(getVideos.rows);
+  } catch (error) {
+    console.log(error, "server join error");
+  }
+});
+
 /////////////// ****************** ADD NEW COMMENTS *************** //////////////////
 router.route("/updatecomments").get(async (req, res) => {
   try {
@@ -451,15 +464,28 @@ router.route("/updatecomments").get(async (req, res) => {
   }
 });
 
-router.route("/currentvideo").get(async (req, res) => {
+/////////////////// GET CURRENT VIDEO /////////////////
+
+router.route("/currentvideo/:video_id").get(async (req, res) => {
   try {
-    const { videoContent } = req.query;
-    console.log("vid content", videoContent);
+    const { video_id } = req.query;
+    console.log("vid ID", video_id);
 
     const getVideo = await pool.query(
       "SELECT * FROM videos WHERE video_id = $1",
-      [videoContent]
+      [video_id]
     );
+
+    console.log("views", getVideo.rows[0].views);
+    let views = getVideo.rows[0].views;
+    views++;
+    let newViews = views;
+
+    console.log("newViews", newViews);
+    await pool.query("UPDATE videos SET views = $1 WHERE video_id = $2", [
+      newViews,
+      video_id,
+    ]);
 
     console.log(getVideo.rows[0]);
     res.status(200).json(getVideo.rows[0]);
@@ -676,7 +702,7 @@ router.route("/subscribe").post(async (req, res) => {
     console.log("user id", user_id);
 
     const subData = await pool.query(
-      "SELECT name,pic,subcount FROM youtubeusers WHERE user_id = $1 ",
+      "SELECT name,pic,subcount,user_id FROM youtubeusers WHERE user_id = $1 ",
       [videoUser]
     );
 
@@ -689,13 +715,27 @@ router.route("/subscribe").post(async (req, res) => {
 
     let userArr = JSON.stringify(userData.rows[0].subscriptions);
     let parsedArr = JSON.parse(userArr);
-    // let parsedUser = JSON.parse(newSubscription);
-    // console.log("parsed user", parsedUser);
-    // console.log(parsedArr);
     parsedArr.push(newSubscription);
 
     console.log("users array", userArr);
     console.log("parsed array", parsedArr);
+
+    const newSubData = await pool.query(
+      "SELECT * FROM youtubeusers WHERE user_id = $1 ",
+      [videoUser]
+    );
+
+    let subs = newSubData.rows[0].subcount;
+    subs++;
+    let newSubs = subs;
+
+    console.log("subs", subs);
+    console.log("new subs", newSubs);
+
+    await pool.query(
+      "UPDATE youtubeusers SET subcount = $1 WHERE user_id = $2 ",
+      [newSubs, videoUser]
+    );
 
     const updateSubs = await pool.query(
       "UPDATE youtubeusers SET subscriptions = $1 WHERE user_id = $2 ",
@@ -724,6 +764,31 @@ router.route("/subscribe").post(async (req, res) => {
     res.status(200).send({ payload: payload });
   } catch (error) {
     console.error("server subscribe error", error);
+  }
+});
+
+router.route("/search/:searchterm").get(async (req, res) => {
+  try {
+    const { searchterm } = req.query;
+    let newTerm = decodeURIComponent(searchterm);
+    console.log("search term", newTerm);
+    // searchterm.replace(/%20/g, " ");
+    const searchData = await pool.query(
+      "SELECT title,views,description,uploader,link,video_id FROM videos"
+    );
+
+    let searches = searchData.rows;
+    let filteredData = searches.filter((video) =>
+      video.title.toLowerCase().includes(newTerm.toLowerCase())
+    );
+
+    // console.log("searches", searches);
+    console.log("filtered data", filteredData);
+
+    // console.log(searchData.rows[0]);
+    res.status(200).json(filteredData);
+  } catch (error) {
+    console.error("server search error", error);
   }
 });
 
