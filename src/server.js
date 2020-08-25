@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
 const busboyBodyParser = require("busboy-body-parser");
 const busboy = require("connect-busboy");
+const pool = require("./db/mysqldb");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 9000;
 app.listen(port, () => console.log(`Server running on port: ${port}`));
+pool.on("connection", () => console.log("MySQL pool connected"));
 
 //connect to Mongo
 const uri =
@@ -49,6 +51,9 @@ app.use("/.netlify/functions/server/typegram", typegram);
 
 const youtube = require("./routes/youtube");
 app.use("/.netlify/functions/server/youtube", youtube);
+
+const filesharing = require("./routes/filesharing");
+app.use("/.netlify/functions/server/filesharing", filesharing);
 
 module.exports = app;
 module.exports.handler = serverless(app);
