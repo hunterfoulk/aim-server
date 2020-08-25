@@ -8,11 +8,13 @@ const Busboy = require("busboy");
 // const cors = require("cors");
 const { cors, corsOptions } = require("../cors");
 
-var whitelist = ["http://localhost:3000", "https://h-airbnb.netlify.app"];
+// var whitelist = ["http://localhost:3000", "https://h-airbnb.netlify.app"];
 // const corsOptions = {
 //   origin: "https://h-airbnb.netlify.app",
 //   credentials: true,
 // };
+
+var whitelist = ["http://localhost:3000", "https://h-airbnb.netlify.app"];
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   console.log("cors fired");

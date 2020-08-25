@@ -11,8 +11,8 @@ const moment = require("moment");
 require("dotenv").config;
 router.use(busboy());
 router.use(busboyBodyParser());
-const { cors, corsOptions } = require("../cors");
 var s3 = require("s3");
+const { cors, corsOptions } = require("../cors");
 
 var whitelist = ["http://localhost:3000", "http://localhost:9000"];
 
