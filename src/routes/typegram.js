@@ -11,10 +11,9 @@ router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
 
-var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
+var whitelist = "https://typegram.netlify.app";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
-  console.log("cors fired");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -23,6 +22,7 @@ router.use(cors(corsOptions(whitelist)), (req, res, next) => {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     return res.status(200).json({});
   }
+  console.log("cors fired");
   next();
 });
 

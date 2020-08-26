@@ -11,7 +11,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
 
-var whitelist = ["http://localhost:3000"];
+var whitelist = "http://localhost:3000";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   console.log("cors fired");
