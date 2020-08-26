@@ -339,7 +339,7 @@ router.route("/updatepic").post(async (req, res) => {
     const updatePic = await pool.query(
       "UPDATE instagramusers SET img = $1 WHERE user_id = $2",
       [
-        `https://airbnbbucket.s3.us-east-2.amazonaws.com/instaclonefolder/${file.name}`,
+        `https://airbnbbucket.s3.us-east-2.amazonaws.com/instacloneprofilepics/${file.name}`,
         parseInt(user_id),
       ]
     );

@@ -51,8 +51,8 @@ app.use("/.netlify/functions/server/typegram", typegram);
 const youtube = require("./routes/youtube");
 app.use("/.netlify/functions/server/youtube", youtube);
 
-// const filesharing = require("./routes/filesharing");
-// app.use("/.netlify/functions/server/filesharing", filesharing);
+const filesharing = require("./routes/filesharing");
+app.use("/.netlify/functions/server/filesharing", filesharing);
 
 module.exports = app;
 module.exports.handler = serverless(app);
