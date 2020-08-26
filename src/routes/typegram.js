@@ -174,7 +174,7 @@ router.route("/posts").post(async (req, res) => {
       console.log("Upload finished");
 
       console.log(file);
-      postUploadToS3(file);
+      uploadProfilePicToS3(file);
     });
     req.pipe(busboy);
     let users = [];
@@ -186,7 +186,7 @@ router.route("/posts").post(async (req, res) => {
         poster,
         caption,
         parseInt(userId),
-        `https://airbnbbucket.s3.us-east-2.amazonaws.com/instacloneposts/${file.name}`,
+        `https://airbnbbucket.s3.us-east-2.amazonaws.com/instacloneprofilepics/${file.name}`,
         JSON.stringify(users),
         JSON.stringify(comments),
       ]
