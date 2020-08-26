@@ -1,6 +1,5 @@
 const mysql = require("mysql");
-const config = require("../config");
-// const PASS = process.env.MYSQLPASS;
+const PASS = process.env.MYSQLPASS;
 
 //LOCALHOST
 const pool = mysql.createConnection({
