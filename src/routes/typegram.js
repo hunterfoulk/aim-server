@@ -192,8 +192,10 @@ router.route("/posts").post(async (req, res) => {
       ]
     );
 
-    res.json(newPost.rows);
-    res.end();
+    res.json(newPost.rows).end();
+    
+
+
     console.table("posted to database", newPost.rows);
   } catch (error) {
     console.log(error.message);
