@@ -11,7 +11,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
 
-var whitelist = "https://typegram.netlify.app";
+var whitelist = "https://typegram.netlify.app/";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
@@ -25,6 +25,24 @@ router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   console.log("cors fired");
   next();
 });
+
+// const whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
+// const getCors = () => {
+//   return {
+//     origin: (origin, callback) => {
+//       if (whitelist.indexOf(origin) !== -1) {
+//         callback(null, true);
+//       } else {
+//         callback("NOT ALLOWED", false);
+//       }
+//     },
+//     credentials: true,
+//     methods: ["GET", "POST"],
+//     exposedHeaders: ["Content-Range"],
+//   };
+// };
+
+// export default getCors;
 
 const SECRET =
   "785bc0808e13150aa10d06e563676943d93548e49c93f32a46907b9a5599fd6ee72dd3edac14eef51c22432ce82e90f0187d24d3c44e673af2691e1950c4b265";
