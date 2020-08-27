@@ -2,3 +2,11 @@
   functions = "functions"
 
 
+[[headers]]
+for = "/*"
+[headers.values]
+Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
+Access-Control-Allow-Methods = "GET, PUT, POST, PATCH, DELETE"
+Access-Control-Allow-Origin = "*"
+Access-Control-Max-Age = "3600"
+Content-Type = "text/plain"
