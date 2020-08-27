@@ -12,7 +12,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 
 // var whitelist = "https://typegram.netlify.app";
-var whitelist = "http://localhost:3000";
+var whitelist = "https://typegram.netlify.app";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
