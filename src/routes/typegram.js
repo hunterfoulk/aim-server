@@ -11,7 +11,7 @@ router.use(busboy());
 router.use(busboyBodyParser());
 const { cors, corsOptions } = require("../cors");
 
-var whitelist = "https://typegram.netlify.app/";
+var whitelist = "https://typegram.netlify.app";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
@@ -193,8 +193,6 @@ router.route("/posts").post(async (req, res) => {
     );
 
     res.json(newPost.rows).end();
-    
-
 
     console.table("posted to database", newPost.rows);
   } catch (error) {
