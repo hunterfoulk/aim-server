@@ -5,8 +5,10 @@ const corsOptions = (whitelist) => {
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {
         callback(null, true);
+        console.log("whitelist", whitelist);
       } else {
         callback(new Error("Not allowed by CORS"));
+        console.log("whitelist", whitelist);
       }
     },
     credentials: true,
