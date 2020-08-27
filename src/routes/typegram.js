@@ -11,7 +11,8 @@ require("dotenv").config;
 router.use(busboy());
 router.use(busboyBodyParser());
 
-var whitelist = "https://typegram.netlify.app";
+// var whitelist = "https://typegram.netlify.app";
+var whitelist = "http://localhost:3000";
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
@@ -85,7 +86,9 @@ function uploadProfilePicToS3(file) {
         console.log("error in callback");
         console.log(err);
       }
-      console.log("success");
+      // console.log("success");
+      console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+
       console.log(data);
     });
   });
@@ -154,6 +157,7 @@ router.route("/posts").post(async (req, res) => {
 
     busboy.on("finish", function () {
       console.log("Upload finished");
+      console.log("POST UPLOADED SUCCESS FROM ROUTE");
 
       console.log(file);
       uploadProfilePicToS3(file);
