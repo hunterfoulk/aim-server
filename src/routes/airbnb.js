@@ -53,7 +53,7 @@ function uploadToS3(file) {
     //   console.log("success");
     //   console.log(data);
     // });
-    s3.upload(params, (err, data) => {
+    s3bucket.upload(params, (err, data) => {
       console.log("putObject callback executing");
       if (err) {
         console.error("err occurred storing to s3: ", err);
