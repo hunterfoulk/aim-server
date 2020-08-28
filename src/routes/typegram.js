@@ -69,35 +69,30 @@ function uploadToS3(file) {
 }
 
 // update profile pic
-const uploadProfilePicToS3 = async (file) => {
+function uploadProfilePicToS3(file) {
   let s3bucket = new AWS.S3({
-    accessKeyId: "AKIA5UGPBOMBHYLRC6GA",
-    secretAccessKey: "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",
-    Bucket: "airbnbbucket",
-  });
-
-  var params = {
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
     Bucket: BUCKET_NAME,
-    Key: `instacloneprofilepics/${file.name}`,
-    Body: file.data,
-    ACL: "public-read",
-    ContentType: file.mimetype,
-  };
-  console.log("this is the image metadeta", params);
-
-  await s3bucket.putObject(params, function (err, data) {
-    if (err) {
-      console.log("error in callback");
-      console.log(err);
-      return;
-    }
-
-    console.log("POST UPLOADED SUCCESS FROM CALLBACK");
-
-    console.log(data);
-    return data;
   });
-};
+  s3bucket.createBucket(function () {
+    var params = {
+      Bucket: BUCKET_NAME,
+      Key: `instacloneprofilepics/${file.name}`,
+      Body: file.data,
+      ACL: "public-read",
+      ContentType: file.mimetype,
+    };
+    console.log("this is the image metadeta", params);
+
+    s3bucket.putObject(params, function (err, data) {
+      if (err) console.log(err, err.stack);
+      // an error occurred
+      else console.log(data); // successful response
+      context.done();
+    });
+  });
+}
 
 //picture s3 post
 function postUploadToS3(file) {
@@ -115,13 +110,11 @@ function postUploadToS3(file) {
       ContentType: file.mimetype,
     };
     console.log("this is the image metadeta", params);
-    s3bucket.upload(params, function (err, data) {
-      if (err) {
-        console.log("error in callback");
-        console.log(err);
-      }
-      console.log("success");
-      console.log(data);
+    s3.putObject(params, function (err, data) {
+      if (err) console.log(err, err.stack);
+      // an error occurred
+      else console.log(data); // successful response
+      context.done();
     });
   });
 }
@@ -160,14 +153,18 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    busboy.on("finish", function () {
-      console.log("Upload finished");
+    try {
+      busboy.on("finish", function () {
+        console.log("Upload finished");
 
-      console.log(file);
-      uploadProfilePicToS3(file);
-    });
+        console.log(file);
+        uploadProfilePicToS3(file);
+      });
 
-    await req.pipe(busboy);
+      req.pipe(busboy);
+    } catch (error) {
+      console.log(error, "error uploading");
+    }
 
     let users = [];
     let comments = [];
@@ -207,7 +204,6 @@ router.route("/signup").post(async (req, res) => {
       uploadToS3(file);
     });
     req.pipe(busboy);
-
     let bio = "";
     let website = "";
     let name = "";
