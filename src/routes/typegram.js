@@ -69,7 +69,7 @@ function uploadToS3(file) {
 }
 
 // update profile pic
-function uploadProfilePicToS3(file) {
+const uploadProfilePicToS3 = async (file) => {
   let s3bucket = new AWS.S3({
     accessKeyId: "AKIA5UGPBOMBHYLRC6GA",
     secretAccessKey: "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",
@@ -85,7 +85,7 @@ function uploadProfilePicToS3(file) {
   };
   console.log("this is the image metadeta", params);
 
-  s3bucket.putObject(params, function (err, data) {
+  await s3bucket.putObject(params, function (err, data) {
     if (err) {
       console.log("error in callback");
       console.log(err);
@@ -97,7 +97,7 @@ function uploadProfilePicToS3(file) {
     console.log(data);
     return data;
   });
-}
+};
 
 //picture s3 post
 function postUploadToS3(file) {
@@ -167,7 +167,7 @@ router.route("/posts").post(async (req, res) => {
       uploadProfilePicToS3(file);
     });
 
-    req.pipe(busboy);
+    await req.pipe(busboy);
 
     let users = [];
     let comments = [];
@@ -207,6 +207,7 @@ router.route("/signup").post(async (req, res) => {
       uploadToS3(file);
     });
     req.pipe(busboy);
+
     let bio = "";
     let website = "";
     let name = "";
