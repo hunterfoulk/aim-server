@@ -142,15 +142,18 @@ router.route("/posts").post(async (req, res) => {
           ContentType: file.mimetype,
         };
         console.log("this is the image metadeta", params);
+
         s3bucket.upload(params, function (err, data) {
           if (err) {
-            console.log("error in callback");
-            console.log(err);
+            res.send({ err, status: "error" });
+          } else {
+            res.send({
+              data: s3res,
+              status: "success",
+              msg: "Image successfully uploaded.",
+            });
           }
-
-          console.log("POST UPLOADED SUCCESS FROM CALLBACK");
-
-          console.log(data);
+          console.log("data", data);
         });
       });
     }
