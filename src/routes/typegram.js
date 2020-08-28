@@ -60,7 +60,7 @@ function uploadToS3(file) {
         console.log(err);
       }
       console.log("bucket post success");
-      console.log(data);
+      console.log("bucket post data", data);
     });
   });
 }
