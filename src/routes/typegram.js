@@ -41,9 +41,9 @@ const IAM_USER_SECRET = config.iamSecret;
 //signup s3 post
 function uploadToS3(file) {
   let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME,
+    accessKeyId: "AKIA5UGPBOMBHYLRC6GA",
+    secretAccessKey: "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",
+    Bucket: "airbnbbucket",
   });
   s3bucket.createBucket(function () {
     var params = {
