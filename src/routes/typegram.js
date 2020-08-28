@@ -126,43 +126,13 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    // update profile pic
-    function uploadProfilePicToS3(file) {
-      let s3bucket = new AWS.S3({
-        accessKeyId: IAM_USER_KEY,
-        secretAccessKey: IAM_USER_SECRET,
-        Bucket: BUCKET_NAME,
-      });
-      s3bucket.createBucket(function () {
-        var params = {
-          Bucket: BUCKET_NAME,
-          Key: `instacloneprofilepics/${file.name}`,
-          Body: file.data,
-          ACL: "public-read",
-          ContentType: file.mimetype,
-        };
-        console.log("this is the image metadeta", params);
-
-        s3bucket.upload(params, function (err, data) {
-          if (err) {
-            res.send({ err, status: "error" });
-          } else {
-            res.send({
-              data: s3res,
-              status: "success",
-              msg: "Image successfully uploaded.",
-            });
-          }
-          console.log("data", data);
-        });
-      });
-    }
     busboy.on("finish", function () {
       console.log("Upload finished");
 
       console.log(file);
       uploadProfilePicToS3(file);
     });
+
     req.pipe(busboy);
 
     let users = [];
