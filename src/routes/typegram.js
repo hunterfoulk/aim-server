@@ -126,13 +126,6 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    busboy.on("finish", function () {
-      console.log("Upload finished");
-
-      console.log(file);
-      uploadProfilePicToS3(file);
-    });
-
     // update profile pic
     function uploadProfilePicToS3(file) {
       let s3bucket = new AWS.S3({
@@ -161,7 +154,12 @@ router.route("/posts").post(async (req, res) => {
         });
       });
     }
+    busboy.on("finish", function () {
+      console.log("Upload finished");
 
+      console.log(file);
+      uploadProfilePicToS3(file);
+    });
     req.pipe(busboy);
 
     let users = [];
