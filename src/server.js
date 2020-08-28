@@ -18,7 +18,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 9000;
 app.listen(port, () => console.log(`Server running on port: ${port}`));
-pool.on("connection", () => console.log("MySQL pool connected"));
+// pool.on("connection", () => console.log("MySQL pool connected"));
 
 //connect to Mongo
 // const uri =
