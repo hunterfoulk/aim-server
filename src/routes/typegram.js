@@ -59,7 +59,7 @@ function uploadToS3(file) {
         console.log("error in callback");
         console.log(err);
       }
-      console.log("success");
+      console.log("bucket post success");
       console.log(data);
     });
   });
