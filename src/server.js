@@ -21,20 +21,20 @@ app.listen(port, () => console.log(`Server running on port: ${port}`));
 pool.on("connection", () => console.log("MySQL pool connected"));
 
 //connect to Mongo
-const uri =
-  "mongodb+srv://hunterfoulk:Murphy01@cluster0-sexjr.mongodb.net/test?retryWrites=true&w=majority";
-mongoose.connect(uri, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-});
-mongoose.set("useFindAndModify", false);
-const connection = mongoose.connection;
-connection.once("open", () => console.log("MongoDB connected successfully"));
+// const uri =
+//   "mongodb+srv://hunterfoulk:Murphy01@cluster0-sexjr.mongodb.net/test?retryWrites=true&w=majority";
+// mongoose.connect(uri, {
+//   useUnifiedTopology: true,
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+// });
+// mongoose.set("useFindAndModify", false);
+// const connection = mongoose.connection;
+// connection.once("open", () => console.log("MongoDB connected successfully"));
 
-//Routes
-const leaderboardRoute = require("./routes/leaderboard");
-app.use("/.netlify/functions/server/leaderboard", leaderboardRoute);
+// //Routes
+// const leaderboardRoute = require("./routes/leaderboard");
+// app.use("/.netlify/functions/server/leaderboard", leaderboardRoute);
 
 const airbnb = require("./routes/airbnb");
 app.use("/.netlify/functions/server/airbnb", airbnb);
