@@ -45,13 +45,24 @@ function uploadToS3(file) {
       ContentType: file.mimetype,
     };
     console.log("this is the image metadeta", params);
-    s3bucket.upload(params, function (err, data) {
+    // s3bucket.upload(params, function (err, data) {
+    //   if (err) {
+    //     console.log("error in callback");
+    //     console.log(err);
+    //   }
+    //   console.log("success");
+    //   console.log(data);
+    // });
+    s3.upload(params, (err, data) => {
+      console.log("putObject callback executing");
       if (err) {
-        console.log("error in callback");
-        console.log(err);
+        console.error("err occurred storing to s3: ", err);
+
+        return;
       }
-      console.log("success");
-      console.log(data);
+      console.log(`${file.name} succuessfully uploaded`);
+
+      return data;
     });
   });
 }
