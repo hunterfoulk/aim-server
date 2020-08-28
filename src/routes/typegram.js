@@ -84,17 +84,18 @@ function uploadProfilePicToS3(file) {
       ContentType: file.mimetype,
     };
     console.log("this is the image metadeta", params);
-    s3bucket
-      .upload(params)
-      .promise()
-      .then((data) => {
-        console.log("complete:PUT Object", data);
-        callback(null, data);
-      })
-      .catch((err) => {
-        console.log("failure:PUT Object", err);
-        callback(err);
-      });
+    s3bucket.upload(params, function (err, data) {
+      if (err) {
+        console.log("error in callback");
+        console.log(err);
+        return;
+      }
+
+      console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+
+      console.log(data);
+      return data;
+    });
   });
 }
 
