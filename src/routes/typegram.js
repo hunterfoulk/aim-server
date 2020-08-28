@@ -65,35 +65,6 @@ function uploadToS3(file) {
   });
 }
 
-// update profile pic
-function uploadProfilePicToS3(file) {
-  let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME,
-  });
-  s3bucket.createBucket(function () {
-    var params = {
-      Bucket: BUCKET_NAME,
-      Key: `instacloneprofilepics/${file.name}`,
-      Body: file.data,
-      ACL: "public-read",
-      ContentType: file.mimetype,
-    };
-    console.log("this is the image metadeta", params);
-    s3bucket.upload(params, function (err, data) {
-      if (err) {
-        console.log("error in callback");
-        console.log(err);
-      }
-      // console.log("success");
-      console.log("POST UPLOADED SUCCESS FROM CALLBACK");
-
-      console.log(data);
-    });
-  });
-}
-
 //picture s3 post
 function postUploadToS3(file) {
   let s3bucket = new AWS.S3({
@@ -157,12 +128,42 @@ router.route("/posts").post(async (req, res) => {
 
     busboy.on("finish", function () {
       console.log("Upload finished");
-      console.log("POST UPLOADED SUCCESS FROM ROUTE");
 
       console.log(file);
       uploadProfilePicToS3(file);
     });
+
+    // update profile pic
+    function uploadProfilePicToS3(file) {
+      let s3bucket = new AWS.S3({
+        accessKeyId: IAM_USER_KEY,
+        secretAccessKey: IAM_USER_SECRET,
+        Bucket: BUCKET_NAME,
+      });
+      s3bucket.createBucket(function () {
+        var params = {
+          Bucket: BUCKET_NAME,
+          Key: `instacloneprofilepics/${file.name}`,
+          Body: file.data,
+          ACL: "public-read",
+          ContentType: file.mimetype,
+        };
+        console.log("this is the image metadeta", params);
+        s3bucket.upload(params, function (err, data) {
+          if (err) {
+            console.log("error in callback");
+            console.log(err);
+          }
+
+          console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+
+          console.log(data);
+        });
+      });
+    }
+
     req.pipe(busboy);
+
     let users = [];
     let comments = [];
 
