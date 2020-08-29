@@ -161,7 +161,7 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    await busboy.on("finish", async function () {
+    busboy.on("finish", async function () {
       await uploadProfilePicToS3(file);
       console.log(file);
       console.log("Upload finished");
