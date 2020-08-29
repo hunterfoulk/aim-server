@@ -15,7 +15,7 @@ router.use(busboyBodyParser());
 // var whitelist = "https://typegram.netlify.app";
 var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
 
-// console.log("me", process.env.AWS_SECRET);
+// console.log("secret log", process.env.AWS_SECRET);
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
@@ -127,11 +127,11 @@ router.route("/accountfeed").get(async (req, res) => {
 
 function uploadProfilePicToS3(file) {
   let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME,
+    accessKeyId: process.env.AWS_USER,
+    secretAccessKey: process.env.AWS_SECRET,
+    Bucket: process.env.AWS_BUCKET,
   });
-
+  console.log("secret log ", process.env.AWS_SECRET);
   var params = {
     Bucket: BUCKET_NAME,
     Key: `instacloneprofilepics/${file.name}`,
