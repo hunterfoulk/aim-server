@@ -155,9 +155,7 @@ router.route("/posts").post(async (req, res) => {
 
       console.log(file);
       // uploadProfilePicToS3(file);
-      const result = await uploadProfilePicToS3(file);
-      console.log("Result", result);
-      return result;
+      await uploadProfilePicToS3(file);
     });
 
     req.pipe(busboy);
