@@ -137,8 +137,19 @@ function uploadProfilePicToS3(file) {
     ContentType: file.mimetype,
   };
   console.log("this is the image metadeta", params);
+  t;
+  s3bucket.upload(params, function (err, data) {
+    if (err) {
+      console.log("error in callback");
+      console.log(err);
+      return;
+    }
 
-  return s3bucket.upload(params).promise();
+    console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+
+    console.log(data);
+    return data;
+  });
 }
 
 router.route("/posts").post(async (req, res) => {
@@ -150,12 +161,10 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    busboy.on("finish", async function () {
-      console.log("Upload finished");
-
-      console.log(file);
-      // uploadProfilePicToS3(file);
+    await busboy.on("finish", async function () {
       await uploadProfilePicToS3(file);
+      console.log(file);
+      console.log("Upload finished");
     });
 
     req.pipe(busboy);
