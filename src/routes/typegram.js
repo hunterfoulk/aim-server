@@ -69,35 +69,6 @@ function uploadToS3(file) {
 }
 
 // update profile pic
-function uploadProfilePicToS3(file) {
-  let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME,
-  });
-
-  var params = {
-    Bucket: BUCKET_NAME,
-    Key: `instacloneprofilepics/${file.name}`,
-    Body: file.data,
-    ACL: "public-read",
-    ContentType: file.mimetype,
-  };
-  console.log("this is the image metadeta", params);
-
-  s3bucket.upload(params, function (err, data) {
-    if (err) {
-      console.log("error in callback");
-      console.log(err);
-      return;
-    }
-
-    console.log("POST UPLOADED SUCCESS FROM CALLBACK");
-
-    console.log(data);
-    return data;
-  });
-}
 
 //picture s3 post
 function postUploadToS3(file) {
@@ -150,6 +121,25 @@ router.route("/accountfeed").get(async (req, res) => {
     console.error(error.message);
   }
 });
+
+function uploadProfilePicToS3(file) {
+  let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME,
+  });
+
+  var params = {
+    Bucket: BUCKET_NAME,
+    Key: `instacloneprofilepics/${file.name}`,
+    Body: file.data,
+    ACL: "public-read",
+    ContentType: file.mimetype,
+  };
+  console.log("this is the image metadeta", params);
+
+  return s3bucket.upload(params).promise();
+}
 
 router.route("/posts").post(async (req, res) => {
   try {
