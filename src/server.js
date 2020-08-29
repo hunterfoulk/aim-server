@@ -1,12 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config;
 const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
 const busboyBodyParser = require("busboy-body-parser");
 const busboy = require("connect-busboy");
 const pool = require("./db/mysqldb");
+// console.log(require("dotenv").config());
+require("dotenv").config();
 
+// require("dotenv");
+// require("dotenv").config({ path: __dirname + "/.env" });
 const app = express();
 
 app.use(busboy());

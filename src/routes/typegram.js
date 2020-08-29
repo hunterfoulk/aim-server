@@ -7,12 +7,15 @@ const AWS = require("aws-sdk");
 const busboyBodyParser = require("busboy-body-parser");
 const busboy = require("connect-busboy");
 const jwt = require("jsonwebtoken");
-require("dotenv").config;
+require("dotenv").config();
+
 router.use(busboy());
 router.use(busboyBodyParser());
 
 // var whitelist = "https://typegram.netlify.app";
 var whitelist = ["http://localhost:3000", "https://typegram.netlify.app"];
+
+// console.log("me", process.env.AWS_SECRET);
 
 router.use(cors(corsOptions(whitelist)), (req, res, next) => {
   res.header(
@@ -73,9 +76,9 @@ function uploadToS3(file) {
 //picture s3 post
 function postUploadToS3(file) {
   let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME,
+    accessKeyId: process.env.AWS_USER,
+    secretAccessKey: process.env.AWS_SECRET,
+    Bucket: process.env.AWS_BUCKET,
   });
   s3bucket.createBucket(function () {
     var params = {
