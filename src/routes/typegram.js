@@ -137,7 +137,7 @@ function uploadProfilePicToS3(file) {
     ContentType: file.mimetype,
   };
   console.log("this is the image metadeta", params);
-  t;
+
   s3bucket.upload(params, function (err, data) {
     if (err) {
       console.log("error in callback");
@@ -168,7 +168,7 @@ router.route("/posts").post(async (req, res) => {
         console.log(file);
         console.log("Upload finished");
       } catch (error) {
-        console.log(error, "callback error");
+        console.log(error, "ERROR ERROR ERROR");
       }
     });
 
