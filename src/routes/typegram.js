@@ -75,22 +75,27 @@ function uploadProfilePicToS3(file) {
     secretAccessKey: IAM_USER_SECRET,
     Bucket: BUCKET_NAME,
   });
-  s3bucket.createBucket(function () {
-    var params = {
-      Bucket: BUCKET_NAME,
-      Key: `instacloneprofilepics/${file.name}`,
-      Body: file.data,
-      ACL: "public-read",
-      ContentType: file.mimetype,
-    };
-    console.log("this is the image metadeta", params);
 
-    s3bucket.putObject(params, function (err, data) {
-      if (err) console.log(err, err.stack);
-      // an error occurred
-      else console.log(data); // successful response
-      context.done();
-    });
+  var params = {
+    Bucket: BUCKET_NAME,
+    Key: `instacloneprofilepics/${file.name}`,
+    Body: file.data,
+    ACL: "public-read",
+    ContentType: file.mimetype,
+  };
+  console.log("this is the image metadeta", params);
+
+  s3bucket.upload(params, function (err, data) {
+    if (err) {
+      console.log("error in callback");
+      console.log(err);
+      return;
+    }
+
+    console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+
+    console.log(data);
+    return data;
   });
 }
 
@@ -110,11 +115,13 @@ function postUploadToS3(file) {
       ContentType: file.mimetype,
     };
     console.log("this is the image metadeta", params);
-    s3.putObject(params, function (err, data) {
-      if (err) console.log(err, err.stack);
-      // an error occurred
-      else console.log(data); // successful response
-      context.done();
+    s3bucket.upload(params, function (err, data) {
+      if (err) {
+        console.log("error in callback");
+        console.log(err);
+      }
+      console.log("success");
+      console.log(data);
     });
   });
 }
@@ -153,18 +160,17 @@ router.route("/posts").post(async (req, res) => {
     var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
 
-    try {
-      busboy.on("finish", function () {
-        console.log("Upload finished");
+    busboy.on("finish", async function () {
+      console.log("Upload finished");
 
-        console.log(file);
-        uploadProfilePicToS3(file);
-      });
+      console.log(file);
+      // uploadProfilePicToS3(file);
+      const result = await uploadProfilePicToS3(file);
+      return result;
+    });
+    console.log("Result", result);
 
-      req.pipe(busboy);
-    } catch (error) {
-      console.log(error, "error uploading");
-    }
+    req.pipe(busboy);
 
     let users = [];
     let comments = [];
