@@ -162,9 +162,14 @@ router.route("/posts").post(async (req, res) => {
     const file = req.files.img;
 
     busboy.on("finish", async function () {
-      await uploadProfilePicToS3(file);
-      console.log(file);
-      console.log("Upload finished");
+      try {
+        await uploadProfilePicToS3(file);
+
+        console.log(file);
+        console.log("Upload finished");
+      } catch (error) {
+        console.log(error, "callback error");
+      }
     });
 
     req.pipe(busboy);
