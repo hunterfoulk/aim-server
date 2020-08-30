@@ -200,7 +200,7 @@ router.route("/posts").post(async (req, res) => {
       try {
         await uploadProfilePicToS3(file);
 
-        console.log(file);
+        console.log("UPLOAD FUNCTION", uploadProfilePicToS3(file));
         console.log("Upload finished");
       } catch (error) {
         console.log(error, "ERROR ERROR ERROR");
