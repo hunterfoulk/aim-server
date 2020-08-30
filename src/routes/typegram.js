@@ -9,6 +9,8 @@ const busboy = require("connect-busboy");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const fs = require("fs");
+// const uuid = require("uuid/v4");
+const multer = require("multer");
 
 router.use(busboy());
 router.use(busboyBodyParser());
@@ -126,107 +128,112 @@ router.route("/accountfeed").get(async (req, res) => {
   }
 });
 
-function uploadProfilePicToS3(file) {
-  let s3bucket = new AWS.S3({
-    accessKeyId: process.env.AWS_USER,
-    secretAccessKey: process.env.AWS_SECRET,
-    Bucket: process.env.AWS_BUCKET,
-  });
-  console.log("secret log ", process.env.AWS_SECRET);
-  var params = {
-    Bucket: BUCKET_NAME,
-    Key: `instacloneprofilepics/${file.name}`,
-    Body: file.data,
-    ACL: "public-read",
-    ContentType: file.mimetype,
-  };
-  console.log("this is the image metadeta", params);
+// const uploadProfilePicToS3 = async (file) => {
+//   let s3bucket = new AWS.S3({
+//     accessKeyId: process.env.AWS_USER,
+//     secretAccessKey: process.env.AWS_SECRET,
+//     Bucket: process.env.AWS_BUCKET,
+//   });
 
-  s3bucket.upload(params, function (err, data) {
-    if (err) {
-      console.log("error in callback");
-      console.log(err);
-      return;
-    }
+//   var params = {
+//     Bucket: BUCKET_NAME,
+//     Key: `instacloneprofilepics/${file.name}`,
+//     Body: file.data,
+//     ACL: "public-read",
+//     ContentType: file.mimetype,
+//   };
+//   console.log("this is the image metadeta", params);
 
-    console.log("POST UPLOADED SUCCESS FROM CALLBACK");
+//   await s3bucket
+//     .putObject(params)
+//     .promise()
+//     .then((data) => {
+//       console.log("complete:PUT Object", data);
+//       callback(null, data);
+//     })
+//     .catch((err) => {
+//       console.log("failure:PUT Object", err);
+//       callback(err);
+//     });
+// };
 
-    console.log(data);
-    return data;
-  });
-}
+// async function upload(fileStream, file,) {
+//   let params = {
+//     Body: fileStream,
+//     Key: fileName,
+//     Bucket: bucketName,
+//   };
+//   await s3.client.putObject(params).promise();
+// }
 
-// Initializing S3 Interface
+// module.exports.handler = async (event, context) => {
+//   try {
+//     let s3UploadParams = {
+//       uri: imageDownloadUrl,
+//       encoding: null,
+//     };
+//     let imageFileStream = await request(s3UploadParams);
+//     await upload(imageFileStream, s3FileName, bucketName);
+//   } catch (err) {
+//     context.fail(null, "Error trying to upload to aws" + err);
+//   }
+// };
+
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_USER,
   secretAccessKey: process.env.AWS_SECRET,
 });
 
-// const uploadFile = (file) => {
-//   // read content from the file
+const storage = multer.memoryStorage({
+  destination: function (req, file, callback) {
+    callback(null, "");
+  },
+});
 
-//   const fileContent = fs.readFileSync(file.name);
-//   console.log(fileContent);
-//   // setting up s3 upload parameters
-//   const params = {
-//     Bucket: process.env.AWS_BUCKET,
-//     Key: file.name, // file name you want to save as
-//     Body: fileContent,
-//     ACL: "public-read",
-//     ContentType: file.mimetype,
-//   };
+const upload = multer({ storage }).single("image");
 
-//   // Uploading files to the bucket
-//   s3.upload(params, function (err, data) {
-//     if (err) {
-//       throw err;
-//     }
-//     console.log(`File uploaded successfully. ${data.Location}`);
-//   });
-// };
-
-// Enter the file you want to upload here
-
-router.route("/posts").post(async (req, res) => {
+router.post("/posts", upload, async (req, res) => {
   try {
     const { poster } = req.body;
     const { caption } = req.body;
     const { userId } = req.body;
-
-    var busboy = new Busboy({ headers: req.headers });
     const file = req.files.img;
+    console.log(file);
 
-    busboy.on("finish", async function () {
-      try {
-        await uploadProfilePicToS3(file);
+    const params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: `serverpics/${file.name}`,
+      Body: file.data,
+      ACL: "public-read",
+      ContentType: file.mimetype,
+    };
 
-        console.log("UPLOAD FUNCTION", uploadProfilePicToS3(file));
-        console.log("Upload finished");
-      } catch (error) {
-        console.log(error, "ERROR ERROR ERROR");
+    await s3.upload(params, (error, data) => {
+      if (error) {
+        res.status(500).send(error);
       }
+
+      res.status(200).send(data);
     });
 
-    req.pipe(busboy);
+    // let users = [];
+    // let comments = [];
 
-    let users = [];
-    let comments = [];
+    // const newPost = await pool.query(
+    //   "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
+    //   [
+    //     poster,
+    //     caption,
+    //     userId,
+    //     `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
+    //     JSON.stringify(users),
+    //     JSON.stringify(comments),
+    //   ]
+    // );
 
-    const newPost = await pool.query(
-      "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-      [
-        poster,
-        caption,
-        parseInt(userId),
-        `https://airbnbbucket.s3.us-east-2.amazonaws.com/instacloneprofilepics/${file.name}`,
-        JSON.stringify(users),
-        JSON.stringify(comments),
-      ]
-    );
+    // // res.status(200).json(newPost.rows);
 
-    res.json(newPost.rows).end();
-
-    console.table("posted to database", newPost.rows);
+    // console.table("posted to database", newPost.rows);
   } catch (error) {
     console.log(error.message);
   }

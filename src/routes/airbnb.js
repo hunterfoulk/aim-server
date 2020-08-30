@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const AWS = require("aws-sdk");
 const config = require("../config");
-require("dotenv").config;
+require("dotenv").config();
 const pool = require("../db/db");
 const jwt = require("jsonwebtoken");
 const Busboy = require("busboy");
 // const cors = require("cors");
 const { cors, corsOptions } = require("../cors");
+const multer = require("multer");
 
 var whitelist = ["http://localhost:3000", "https://h-airbnb.netlify.app"];
 
@@ -55,6 +56,19 @@ function uploadToS3(file) {
     });
   });
 }
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_USER,
+  secretAccessKey: process.env.AWS_SECRET,
+});
+
+const storage = multer.memoryStorage({
+  destination: function (req, file, callback) {
+    callback(null, "");
+  },
+});
+
+const upload = multer({ storage }).single("image");
 
 //middleware
 const auth = async (req, res, next) => {
