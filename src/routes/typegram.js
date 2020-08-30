@@ -179,20 +179,7 @@ router.route("/accountfeed").get(async (req, res) => {
 //   }
 // };
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_USER,
-  secretAccessKey: process.env.AWS_SECRET,
-});
-
-const storage = multer.memoryStorage({
-  destination: function (req, file, callback) {
-    callback(null, "");
-  },
-});
-
-const upload = multer({ storage }).single("image");
-
-router.post("/posts", upload, async (req, res) => {
+router.post("/posts", async (req, res) => {
   try {
     const { poster } = req.body;
     const { caption } = req.body;
@@ -202,6 +189,19 @@ router.post("/posts", upload, async (req, res) => {
     console.log("caption", caption);
     console.log("poster", poster);
     console.log("user_id", userId);
+
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_USER,
+      secretAccessKey: process.env.AWS_SECRET,
+    });
+
+    const storage = multer.memoryStorage({
+      destination: function (req, file, callback) {
+        callback(null, "");
+      },
+    });
+
+    multer({ storage }).single("image");
 
     const params = {
       Bucket: process.env.AWS_BUCKET,
