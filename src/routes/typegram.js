@@ -192,7 +192,7 @@ const storage = multer.memoryStorage({
 
 const upload = multer({ storage }).single("image");
 
-router.route("/posts").post(async (req, res) => {
+router.post("/posts", upload, async (req, res) => {
   try {
     const { poster } = req.body;
     const { caption } = req.body;
