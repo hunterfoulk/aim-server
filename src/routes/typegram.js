@@ -186,7 +186,7 @@ const postQuery = (poster, caption, userId, file) => {
   console.log("caption", caption);
   console.log("poster", poster);
   console.log("user_id", userId);
-  const newPost = pool.query(
+  pool.query(
     "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
     [
       poster,
@@ -197,11 +197,22 @@ const postQuery = (poster, caption, userId, file) => {
       JSON.stringify(comments),
     ]
   );
-
-  console.log("db post", newPost.rows);
 };
 
-router.post("/posts", async (req, res) => {
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_USER,
+  secretAccessKey: process.env.AWS_SECRET,
+});
+
+const storage = multer.memoryStorage({
+  destination: function (req, file, callback) {
+    callback(null, "");
+  },
+});
+
+const upload = multer({ storage }).single("image");
+
+router.post("/posts", upload, async (req, res) => {
   try {
     const { poster } = req.body;
     const { caption } = req.body;
@@ -209,18 +220,7 @@ router.post("/posts", async (req, res) => {
     const file = req.files.img;
     console.log(file);
 
-    const s3 = new AWS.S3({
-      accessKeyId: process.env.AWS_USER,
-      secretAccessKey: process.env.AWS_SECRET,
-    });
-
-    const storage = multer.memoryStorage({
-      destination: function (req, file, callback) {
-        callback(null, "");
-      },
-    });
-
-    multer({ storage }).single("image");
+    postQuery(poster, caption, userId, file);
 
     const params = {
       Bucket: process.env.AWS_BUCKET,
@@ -235,13 +235,10 @@ router.post("/posts", async (req, res) => {
         res.status(500).send(error);
       }
 
-      postQuery(poster, caption, userId, file);
-
       res.status(200).send(data);
     });
 
     res.status(200);
-    // console.table("posted to database", newPost.rows);
   } catch (error) {
     console.log(error.message);
   }
