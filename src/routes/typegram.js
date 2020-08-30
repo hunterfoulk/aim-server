@@ -8,6 +8,7 @@ const busboyBodyParser = require("busboy-body-parser");
 const busboy = require("connect-busboy");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const fs = require("fs");
 
 router.use(busboy());
 router.use(busboyBodyParser());
@@ -154,6 +155,37 @@ function uploadProfilePicToS3(file) {
     return data;
   });
 }
+
+// Initializing S3 Interface
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_USER,
+  secretAccessKey: process.env.AWS_SECRET,
+});
+
+// const uploadFile = (file) => {
+//   // read content from the file
+
+//   const fileContent = fs.readFileSync(file.name);
+//   console.log(fileContent);
+//   // setting up s3 upload parameters
+//   const params = {
+//     Bucket: process.env.AWS_BUCKET,
+//     Key: file.name, // file name you want to save as
+//     Body: fileContent,
+//     ACL: "public-read",
+//     ContentType: file.mimetype,
+//   };
+
+//   // Uploading files to the bucket
+//   s3.upload(params, function (err, data) {
+//     if (err) {
+//       throw err;
+//     }
+//     console.log(`File uploaded successfully. ${data.Location}`);
+//   });
+// };
+
+// Enter the file you want to upload here
 
 router.route("/posts").post(async (req, res) => {
   try {
