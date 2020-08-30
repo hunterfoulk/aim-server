@@ -179,6 +179,28 @@ router.route("/accountfeed").get(async (req, res) => {
 //   }
 // };
 
+const postQuery = (poster, caption, userId, file) => {
+  let users = [];
+  let comments = [];
+  let fileName = `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`;
+  console.log("caption", caption);
+  console.log("poster", poster);
+  console.log("user_id", userId);
+  const newPost = pool.query(
+    "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
+    [
+      poster,
+      caption,
+      userId,
+      fileName,
+      JSON.stringify(users),
+      JSON.stringify(comments),
+    ]
+  );
+
+  console.log("db post", newPost.rows);
+};
+
 router.post("/posts", async (req, res) => {
   try {
     const { poster } = req.body;
@@ -186,9 +208,6 @@ router.post("/posts", async (req, res) => {
     const { userId } = req.body;
     const file = req.files.img;
     console.log(file);
-    console.log("caption", caption);
-    console.log("poster", poster);
-    console.log("user_id", userId);
 
     const s3 = new AWS.S3({
       accessKeyId: process.env.AWS_USER,
@@ -215,27 +234,12 @@ router.post("/posts", async (req, res) => {
       if (error) {
         res.status(500).send(error);
       }
-      let users = [];
-      let comments = [];
 
-      const newPost = pool.query(
-        "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-        [
-          poster,
-          caption,
-          userId,
-          `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
-          JSON.stringify(users),
-          JSON.stringify(comments),
-        ]
-      );
+      postQuery(poster, caption, userId, file);
 
-      console.log("db post", newPost.rows);
       res.status(200).send(data);
     });
 
-    // res.json(newPost.rows).end();
-    // // res.json(newPost.rows).end();
     res.status(200);
     // console.table("posted to database", newPost.rows);
   } catch (error) {
