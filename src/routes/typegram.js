@@ -215,9 +215,6 @@ router.post("/posts", async (req, res) => {
       if (error) {
         res.status(500).send(error);
       }
-
-      res.status(200).send(data);
-
       let users = [];
       let comments = [];
 
@@ -234,6 +231,7 @@ router.post("/posts", async (req, res) => {
       );
 
       console.log("db post", newPost.rows);
+      res.status(200).send(data);
     });
 
     // res.json(newPost.rows).end();
