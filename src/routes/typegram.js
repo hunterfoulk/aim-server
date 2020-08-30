@@ -211,6 +211,10 @@ const storage = multer.memoryStorage({
 });
 
 const upload = multer({ storage }).single("image");
+// var upload = upload.fields([
+//   { name: "avatar", maxCount: 1 },
+//   { name: "gallery", maxCount: 8 },
+// ]);
 
 router.post("/posts", upload, async (req, res) => {
   try {
@@ -233,9 +237,9 @@ router.post("/posts", upload, async (req, res) => {
         res.status(500).send(error);
       }
 
+      postQuery(poster, caption, userId, file);
       res.status(200).send(data);
     });
-
     res.status(200);
   } catch (error) {
     console.log(error.message);
