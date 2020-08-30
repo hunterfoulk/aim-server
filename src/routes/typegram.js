@@ -192,13 +192,16 @@ const storage = multer.memoryStorage({
 
 const upload = multer({ storage }).single("image");
 
-router.post("/posts", upload, async (req, res) => {
+router.route("/posts").post(async (req, res) => {
   try {
     const { poster } = req.body;
     const { caption } = req.body;
     const { userId } = req.body;
     const file = req.files.img;
     console.log(file);
+    console.log("caption", caption);
+    console.log("poster", poster);
+    console.log("user_id", userId);
 
     const params = {
       Bucket: process.env.AWS_BUCKET,
@@ -216,24 +219,24 @@ router.post("/posts", upload, async (req, res) => {
       res.status(200).send(data);
     });
 
-    // let users = [];
-    // let comments = [];
+    let users = [];
+    let comments = [];
 
-    // const newPost = await pool.query(
-    //   "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-    //   [
-    //     poster,
-    //     caption,
-    //     userId,
-    //     `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
-    //     JSON.stringify(users),
-    //     JSON.stringify(comments),
-    //   ]
-    // );
+    const newPost = await pool.query(
+      "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
+      [
+        poster,
+        caption,
+        userId,
+        `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
+        JSON.stringify(users),
+        JSON.stringify(comments),
+      ]
+    );
 
-    // // res.status(200).json(newPost.rows);
-
-    // console.table("posted to database", newPost.rows);
+    // res.json(newPost.rows).end();
+    res.json(newPost.rows).end();
+    console.table("posted to database", newPost.rows);
   } catch (error) {
     console.log(error.message);
   }
