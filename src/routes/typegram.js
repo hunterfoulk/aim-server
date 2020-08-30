@@ -217,24 +217,26 @@ router.post("/posts", async (req, res) => {
       }
 
       res.status(200).send(data);
+
+      let users = [];
+      let comments = [];
+
+      const newPost = pool.query(
+        "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
+        [
+          poster,
+          caption,
+          userId,
+          `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
+          JSON.stringify(users),
+          JSON.stringify(comments),
+        ]
+      );
+
+      console.log("db post", newPost.rows);
     });
 
-    let users = [];
-    let comments = [];
-
-    // const newPost = await pool.query(
-    //   "INSERT INTO posts (poster,caption,user_id,img,users,comments) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-    //   [
-    //     poster,
-    //     caption,
-    //     userId,
-    //     `https://airbnbbucket.s3.us-east-2.amazonaws.com/serverpics/${file.name}`,
-    //     JSON.stringify(users),
-    //     JSON.stringify(comments),
-    //   ]
-    // );
-
-    // // res.json(newPost.rows).end();
+    // res.json(newPost.rows).end();
     // // res.json(newPost.rows).end();
     res.status(200);
     // console.table("posted to database", newPost.rows);
