@@ -220,8 +220,6 @@ router.post("/posts", upload, async (req, res) => {
     const file = req.files.img;
     console.log(file);
 
-    postQuery(poster, caption, userId, file);
-
     const params = {
       Bucket: process.env.AWS_BUCKET,
       Key: `serverpics/${file.name}`,
