@@ -231,13 +231,15 @@ router.post("/posts", async (req, res) => {
       ACL: "public-read",
       ContentType: file.mimetype,
     };
+    console.log("BEFORE");
+    await postQuery(poster, caption, userId, file);
+    console.log("AFTER");
 
-    await s3.upload(params, (error, data) => {
+    s3.upload(params, (error, data) => {
       if (error) {
         res.status(500).send(error);
       }
 
-      postQuery(poster, caption, userId, file);
       res.status(200).send(data);
     });
 
