@@ -210,17 +210,17 @@ const storage = multer.memoryStorage({
   },
 });
 
-const upload = multer({ storage }).single("image");
-// var upload = upload.fields([
-//   { name: "avatar", maxCount: 1 },
-//   { name: "gallery", maxCount: 8 },
-// ]);
+// const upload = multer({ storage });
+// var upload = new multer({ dest: "c:\\upload" });
+var upload = multer({ storage: storage });
 
-router.post("/posts", upload, async (req, res) => {
+router.post("/posts", async (req, res) => {
   try {
-    const { poster } = req.body;
-    const { caption } = req.body;
-    const { userId } = req.body;
+    const { poster, caption, userId } = req.body;
+    console.log("caption", caption);
+    console.log("poster", poster);
+    console.log("user_id", userId);
+
     const file = req.files.img;
     console.log(file);
 
@@ -240,6 +240,7 @@ router.post("/posts", upload, async (req, res) => {
       postQuery(poster, caption, userId, file);
       res.status(200).send(data);
     });
+
     res.status(200);
   } catch (error) {
     console.log(error.message);
